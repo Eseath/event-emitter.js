@@ -1,7 +1,37 @@
 const EventEmitter = function () {};
 
+function indexOfListener(listeners, listener) {
+    let i = listeners.length;
+
+    while (i--) {
+        if (listeners[i] === listener) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 EventEmitter.prototype = {
     eventListeners: {},
+
+    removeListener(evt, listener) {
+        let listeners = this.getListeners(evt);
+        let index;
+        let key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key)) {
+                index = indexOfListener(listeners[key], listener);
+
+                if (index !== -1) {
+                    listeners[key].splice(index, 1);
+                }
+            }
+        }
+
+        return this;
+    },
 
     getListeners(eventName) {
         let events = this.eventListeners;
@@ -33,7 +63,7 @@ EventEmitter.prototype = {
         return response;
     },
 
-    listen(eventName, listener) {
+    listen(eventName, listener, once = false) {
         if (typeof listener !== 'function') {
             throw new TypeError('listener must be a function');
         }
@@ -43,7 +73,7 @@ EventEmitter.prototype = {
         listeners[eventName] = (listeners[eventName] || []);
         listeners[eventName].push({
             listener: listener,
-            once: false,
+            once,
         });
 
         return this;
@@ -59,6 +89,11 @@ EventEmitter.prototype = {
 
                 for (let i = 0; i < listeners.length; i++) {
                     const listener = listeners[i];
+
+                    if (listener.once === true) {
+                        this.removeListener(eventName, listener);
+                    }
+
                     listener.listener.apply(this, [
                         { type: eventName, payload: args[0] },
                         ...args.slice(1),
