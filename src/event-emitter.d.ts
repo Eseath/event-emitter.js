@@ -4,8 +4,9 @@ export class EventEmitter {
      *
      * @param event
      * @param listener
+     * @param once
      */
-    listen(event: string, listener: Function) : EventEmitter;
+    listen(event: string, listener: Function, once: boolean) : EventEmitter;
 
     /**
      * //
