@@ -16,6 +16,14 @@ export class EventEmitter {
     emit(event: string|RegExp, ...args: any[]) : EventEmitter;
 
     /**
+     * Removes listener of the specified event.
+     *
+     * @param event
+     * @param listener
+     */
+    off(event: string, listener: Function) : EventEmitter;
+
+    /**
      * Merges with specified class.
      *
      * @param target

@@ -91,6 +91,8 @@ EventEmitter.prototype = {
                 }
             }
         }
+
+        return this;
     },
 
     emit(eventName, ...args) {
