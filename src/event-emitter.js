@@ -71,12 +71,26 @@ EventEmitter.prototype = {
         let listeners = this.getListeners(eventName);
 
         listeners[eventName] = (listeners[eventName] || []);
-        listeners[eventName].push({
-            listener: listener,
-            once,
-        });
+        listeners[eventName].push({ listener, once });
 
         return this;
+    },
+
+    off(eventName, listener) {
+        let listenersMap = this.getListeners(eventName);
+        let listeners;
+
+        for (let key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+
+                for (let i = 0; i < listeners.length; i++) {
+                    if (listener === listeners[i].listener) {
+                        this.removeListener(eventName, listeners[i]);
+                    }
+                }
+            }
+        }
     },
 
     emit(eventName, ...args) {
