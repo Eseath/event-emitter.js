@@ -6,7 +6,7 @@ export class EventEmitter {
      * @param listener
      * @param once
      */
-    listen(event: string, listener: Function, once: boolean) : EventEmitter;
+    listen(event: string, listener: Function, once?: boolean) : EventEmitter;
 
     /**
      * //
