@@ -1,4 +1,6 @@
-const EventEmitter = function () {};
+const EventEmitter = function () {
+    this.eventListeners = {};
+};
 
 function indexOfListener(listeners, listener) {
     let i = listeners.length;
@@ -13,8 +15,6 @@ function indexOfListener(listeners, listener) {
 }
 
 EventEmitter.prototype = {
-    eventListeners: {},
-
     removeListener(evt, listener) {
         let listeners = this.getListeners(evt);
         let index;
